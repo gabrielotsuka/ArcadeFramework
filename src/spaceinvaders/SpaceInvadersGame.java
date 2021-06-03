@@ -7,7 +7,6 @@ import spriteframework.MainFrame;
 
 public class SpaceInvadersGame extends MainFrame {
 
-
 	public SpaceInvadersGame () {
 		super("Space Invaders");
 	}
@@ -16,13 +15,8 @@ public class SpaceInvadersGame extends MainFrame {
 		return new SpaceInvadersBoard();
 	}
 
-
 	public static void main(String[] args) {
-
-		EventQueue.invokeLater(() -> {
-
-			new SpaceInvadersGame();
-		});
+		EventQueue.invokeLater(SpaceInvadersGame::new);
 	}
 
 }

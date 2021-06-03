@@ -4,6 +4,7 @@ package spriteframework;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import spaceinvaders.sprite.Shot;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.Player;
 
@@ -27,14 +28,13 @@ public abstract class AbstractBoard extends JPanel {
     protected Dimension d;
     
     //define sprites
-//    private List<Alien> aliens;
     protected LinkedList<Player> players;
-    
+
     protected LinkedList<BadSprite> badSprites;
     
 //    private Shot shot;
-//    
-    // define global control vars   
+
+    // define global control vars
 //    private int direction = -1;
 //    private int deaths = 0;
 
@@ -59,11 +59,10 @@ public abstract class AbstractBoard extends JPanel {
 
         initBoard();
         createPlayers();
-		        numberPlayers = 1;
-		        badSprites = new LinkedList<BadSprite>();
-		        createBadSprites();
-		        createOtherSprites();
-		//        shot = new Shot();
+        numberPlayers = 1;
+        badSprites = new LinkedList<>();
+        createBadSprites();
+        createOtherSprites();
     }
 
     private void initBoard() {
@@ -86,10 +85,10 @@ public abstract class AbstractBoard extends JPanel {
 
 
     protected void createPlayers() {
-		players = new LinkedList<Player>();
+		players = new LinkedList<>();
         players.add(createPlayer());
 	}
-	
+
 	protected Player createPlayer() {
 		return new Player();
 	}
@@ -99,7 +98,11 @@ public abstract class AbstractBoard extends JPanel {
 		   return players.get(i);
 	   return null;
    }
-   
+
+    protected Shot createShot() {
+        return new Shot();
+    }
+
     private void drawBadSprites(Graphics g) {
 
         for (BadSprite bad : badSprites) {
@@ -136,10 +139,6 @@ public abstract class AbstractBoard extends JPanel {
     		}
     	}
     }
-
-
-
-
 
     @Override
     public void paintComponent(Graphics g) {

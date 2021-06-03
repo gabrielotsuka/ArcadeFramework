@@ -25,7 +25,6 @@ public class BomberSprite extends BadnessBoxSprite {
 
         String alienImg = "images/alien.png";
         ImageIcon ii = new ImageIcon(alienImg);
-
         setImage(ii.getImage());
     }
 

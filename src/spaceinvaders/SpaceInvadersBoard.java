@@ -17,21 +17,20 @@ import spriteframework.sprite.Player;
 import spaceinvaders.sprite.*;
 
 public class SpaceInvadersBoard extends AbstractBoard{  
-//    define sprites
-    private List<BadSprite> aliens;
-    private Shot shot;    
-    
+    //    define sprites
+    private Shot shot = createShot();
+
     // define global control vars   
     private int direction = -1;
     private int deaths = 0;
-
 
     private String explImg = "images/explosion.png";
 
     protected void createBadSprites() {  // create sprites
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-                BomberSprite alien = new BomberSprite(Commons.ALIEN_INIT_X + 18 * j,
+                BomberSprite alien = new BomberSprite(
+                        Commons.ALIEN_INIT_X + 18 * j,
                         Commons.ALIEN_INIT_Y + 18 * i);
                 badSprites.add(alien);
             }
@@ -72,24 +71,6 @@ public class SpaceInvadersBoard extends AbstractBoard{
 			}
 		}
 	}
-
-    private void gameOver(Graphics g) {
-
-        g.setColor(Color.black);
-        g.fillRect(0, 0, Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
-
-        g.setColor(new Color(0, 32, 48));
-        g.fillRect(50, Commons.BOARD_WIDTH / 2 - 30, Commons.BOARD_WIDTH - 100, 50);
-        g.setColor(Color.white);
-        g.drawRect(50, Commons.BOARD_WIDTH / 2 - 30, Commons.BOARD_WIDTH - 100, 50);
-
-        Font small = new Font("Helvetica", Font.BOLD, 14);
-        FontMetrics fontMetrics = this.getFontMetrics(small);
-
-        g.setColor(Color.white);
-        g.setFont(small);
-        g.drawString(message, (Commons.BOARD_WIDTH - fontMetrics.stringWidth(message)) / 2, Commons.BOARD_WIDTH / 2);
-    }
 
     protected void update() {
 
@@ -187,7 +168,7 @@ public class SpaceInvadersBoard extends AbstractBoard{
                     message = "Invasion!";
                 }
 
-                alien.moveX(direction);
+                alien.act(direction);
             }
         }
 
@@ -196,9 +177,6 @@ public class SpaceInvadersBoard extends AbstractBoard{
         updateOtherSprites();
     }
 
-	
-
-    
     protected void updateOtherSprites() {
 		Random generator = new Random();
 

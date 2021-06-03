@@ -19,14 +19,4 @@ public abstract class MainFrame extends JFrame  {
 		setLocationRelativeTo(null);
 		setVisible(true);
     }
-
-
-//    public static void main(String[] args) {
-//
-//        EventQueue.invokeLater(() -> {
-//
-//            MainFrameExtended ex = new MainFrameExtended();
-//        });
-//    }
-    
 }
