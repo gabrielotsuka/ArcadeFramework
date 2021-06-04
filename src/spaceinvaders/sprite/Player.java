@@ -1,6 +1,7 @@
-package spriteframework.sprite;
+package spaceinvaders.sprite;
 
-import spriteframework.Commons;
+import spaceinvaders.Commons;
+import spriteframework.sprite.Sprite;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

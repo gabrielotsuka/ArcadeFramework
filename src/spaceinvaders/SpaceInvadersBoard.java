@@ -6,7 +6,7 @@ import spaceinvaders.sprite.BomberSprite;
 import spaceinvaders.sprite.Shot;
 import spriteframework.AbstractBoard;
 import spriteframework.sprite.BadSprite;
-import spriteframework.sprite.Player;
+import spaceinvaders.sprite.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +21,15 @@ public class SpaceInvadersBoard extends AbstractBoard{
     private int deaths = 0;
 
     private final String explImg = "src/images/explosion.png";
+
+    public SpaceInvadersBoard() {
+        d = new Dimension(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
+        setBackground(Color.black);
+    }
+
+    protected Player createPlayer() {
+        return new Player();
+    }
 
     protected void createBadSprites() {
         for (int i = 0; i < 4; i++) {
@@ -62,6 +71,21 @@ public class SpaceInvadersBoard extends AbstractBoard{
 			}
 		}
 	}
+
+    @Override
+    protected void gameOver(Graphics2D g) {
+        g.setColor(Color.black);
+        g.fillRect(0, 0, Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
+        g.setColor(new Color(0, 32, 48));
+        g.fillRect(50, Commons.BOARD_WIDTH / 2 - 30, Commons.BOARD_WIDTH - 100, 50);
+        g.setColor(Color.white);
+        g.drawRect(50, Commons.BOARD_WIDTH / 2 - 30, Commons.BOARD_WIDTH - 100, 50);
+        Font small = new Font("Helvetica", Font.BOLD, 14);
+        FontMetrics fontMetrics = this.getFontMetrics(small);
+        g.setColor(Color.white);
+        g.setFont(small);
+        g.drawString(message, (Commons.BOARD_WIDTH - fontMetrics.stringWidth(message)) / 2, Commons.BOARD_WIDTH / 2);
+    }
 
     protected void update() {
         if (deaths == Commons.NUMBER_OF_ALIENS_TO_DESTROY) {
@@ -197,6 +221,15 @@ public class SpaceInvadersBoard extends AbstractBoard{
                 }
             }
         }
-	}    
+	}
+
+    @Override
+    protected void doDrawing(Graphics g1) {
+        super.doDrawing(g1);
+        Graphics2D g = (Graphics2D) g1;
+        if (inGame) {
+            g.drawLine(0, Commons.GROUND, Commons.BOARD_WIDTH, Commons.GROUND);
+        }
+    }
 }
 

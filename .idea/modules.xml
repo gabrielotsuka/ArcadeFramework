@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FreezeMonsters.iml" filepath="$PROJECT_DIR$/FreezeMonsters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArcadeFramework.iml" filepath="$PROJECT_DIR$/ArcadeFramework.iml" />
     </modules>
   </component>
 </project>

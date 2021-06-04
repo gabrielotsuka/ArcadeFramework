@@ -9,6 +9,7 @@ public class SpaceInvadersGame extends MainFrame {
 
 	public SpaceInvadersGame () {
 		super("Space Invaders");
+		setSize(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
 	}
 	
 	protected  AbstractBoard createBoard() {
