@@ -1,27 +1,19 @@
 package spaceinvaders.sprite;
 
 import spaceinvaders.Commons;
-import spriteframework.sprite.Sprite;
+import spriteframework.sprite.Player;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-public class Player extends Sprite {
+public class Defender extends Player {
 
-    private int width;
-
-    public Player() {
-        loadImage();
-		getImageDimensions();
-		resetState();
-    }
-
-    protected void loadImage () {
-        ImageIcon ii = new ImageIcon("src/images/player.png");
+    public void loadImage () {
+        ImageIcon ii = new ImageIcon("src/images/defender.png");
         width = ii.getImage().getWidth(null);
         setImage(ii.getImage());
     }
-    
+
     public void act() {
         x += dx;
         if (x <= 2) {
@@ -50,10 +42,5 @@ public class Player extends Sprite {
         if (key == KeyEvent.VK_RIGHT) {
             dx = 0;
         }
-    }
-
-    private void resetState() {
-        setX(Commons.INIT_PLAYER_X);
-        setY(Commons.INIT_PLAYER_Y);
     }
 }

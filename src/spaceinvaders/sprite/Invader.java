@@ -7,11 +7,11 @@ import javax.swing.ImageIcon;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.BadnessBoxSprite;
 
-public class BomberSprite extends BadnessBoxSprite {
+public class Invader extends BadnessBoxSprite {
 
     private Bomb bomb;
 
-    public BomberSprite(int x, int y) {
+    public Invader(int x, int y) {
         initBomber(x, y);
     }
 

@@ -2,11 +2,12 @@ package spaceinvaders;
 
 
 import spaceinvaders.sprite.Bomb;
-import spaceinvaders.sprite.BomberSprite;
+import spaceinvaders.sprite.Defender;
+import spaceinvaders.sprite.Invader;
 import spaceinvaders.sprite.Shot;
 import spriteframework.AbstractBoard;
 import spriteframework.sprite.BadSprite;
-import spaceinvaders.sprite.Player;
+import spriteframework.sprite.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,13 +29,13 @@ public class SpaceInvadersBoard extends AbstractBoard{
     }
 
     protected Player createPlayer() {
-        return new Player();
+        return new Defender();
     }
 
     protected void createBadSprites() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-                BomberSprite alien = new BomberSprite(
+                Invader alien = new Invader(
                         Commons.ALIEN_INIT_X + 18 * j,
                         Commons.ALIEN_INIT_Y + 18 * i);
                 badSprites.add(alien);
@@ -187,7 +188,7 @@ public class SpaceInvadersBoard extends AbstractBoard{
 
         for (BadSprite alien : badSprites) {
             int shot = generator.nextInt(15);
-            Bomb bomb = ((BomberSprite)alien).getBomb();
+            Bomb bomb = ((Invader)alien).getBomb();
 
             if (shot == Commons.CHANCE && alien.isVisible() && bomb.isDestroyed()) {
                 bomb.setDestroyed(false);
@@ -223,12 +224,56 @@ public class SpaceInvadersBoard extends AbstractBoard{
         }
 	}
 
-    @Override
     protected void doDrawing(Graphics g1) {
-        super.doDrawing(g1);
-        Graphics2D g = (Graphics2D) g1;
+        g = (Graphics2D) g1;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.setColor(Color.black);
+        g.fillRect(0,0,d.width, d.height);
+        g.setColor(Color.green);
+
         if (inGame) {
             g.drawLine(0, Commons.GROUND, Commons.BOARD_WIDTH, Commons.GROUND);
+            drawBadSprites(g);
+            drawPlayers(g);
+            drawOtherSprites(g);
+        } else {
+            if (timer.isRunning()) {
+                timer.stop();
+            }
+            gameOver(g);
+        }
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+    private void drawBadSprites(Graphics g) {
+        for (BadSprite bad : badSprites) {
+            if (bad.isVisible()) {
+                g.drawImage(bad.getImage(), bad.getX(), bad.getY(), this);
+            }
+            if (bad.isDying()) {
+                bad.die();
+            }
+            if (bad.getBadnesses()!= null) {
+                for (BadSprite badness: bad.getBadnesses()) {
+                    if (!badness.isDestroyed()) {
+                        g.drawImage(badness.getImage(), badness.getX(), badness.getY(), this);
+                    }
+                }
+            }
+        }
+    }
+
+    private void drawPlayers(Graphics g) {
+        for (Player player: players) {
+            if (player.isVisible()) {
+                g.drawImage(player.getImage(), player.getX(), player.getY(), this);
+            }
+
+            if (player.isDying()) {
+                player.die();
+                inGame = false;
+            }
         }
     }
 }

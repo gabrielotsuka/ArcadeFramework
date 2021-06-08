@@ -2,7 +2,7 @@ package spriteframework;
 
 import spaceinvaders.sprite.Shot;
 import spriteframework.sprite.BadSprite;
-import spaceinvaders.sprite.Player;
+import spriteframework.sprite.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,8 @@ import java.util.LinkedList;
 public abstract class AbstractBoard extends JPanel {
 
     protected Dimension d;
-    
+    protected Graphics2D g;
+
     protected LinkedList<Player> players;
     protected LinkedList<BadSprite> badSprites;
     
@@ -29,17 +30,13 @@ public abstract class AbstractBoard extends JPanel {
     protected abstract void createBadSprites();
     protected abstract void createOtherSprites();
     protected abstract void drawOtherSprites(Graphics g);
+    protected abstract void doDrawing(Graphics g);
     protected abstract void update();
     protected abstract void processOtherSprites(Player player, KeyEvent e);
     protected abstract void gameOver(Graphics2D g);
 
     public AbstractBoard() {
         initBoard();
-        numberPlayers = 1;
-        createPlayers();
-        badSprites = new LinkedList<>();
-        createBadSprites();
-        createOtherSprites();
     }
 
     private void initBoard() {
@@ -69,58 +66,6 @@ public abstract class AbstractBoard extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         doDrawing(g);
-    }
-
-    protected void doDrawing(Graphics g1) {
-        Graphics2D g = (Graphics2D) g1;
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g.setColor(Color.black);
-        g.fillRect(0, 0, d.width, d.height);
-        g.setColor(Color.green);
-
-        if (inGame) {
-            drawBadSprites(g);
-            drawPlayers(g);
-            drawOtherSprites(g);
-        } else {
-            if (timer.isRunning()) {
-                timer.stop();
-            }
-            gameOver(g);
-        }
-        Toolkit.getDefaultToolkit().sync();
-    }
-
-    private void drawBadSprites(Graphics g) {
-        for (BadSprite bad : badSprites) {
-            if (bad.isVisible()) {
-                g.drawImage(bad.getImage(), bad.getX(), bad.getY(), this);
-            }
-            if (bad.isDying()) {
-                bad.die();
-            }
-            if (bad.getBadnesses()!= null) {
-            	for (BadSprite badness: bad.getBadnesses()) {
-            		if (!badness.isDestroyed()) {
-            			g.drawImage(badness.getImage(), badness.getX(), badness.getY(), this);
-            		}
-            	}
-            }
-        }
-    }
-
-    private void drawPlayers(Graphics g) {
-    	for (Player player: players) {
-    		if (player.isVisible()) {
-    			g.drawImage(player.getImage(), player.getX(), player.getY(), this);
-    		}
-
-    		if (player.isDying()) {
-    			player.die();
-    			inGame = false;
-    		}
-    	}
     }
 
     private class GameCycle implements ActionListener {

@@ -1,6 +1,5 @@
 package freezeMonsters;
 
-import spaceinvaders.Commons;
 import spriteframework.AbstractBoard;
 import spriteframework.MainFrame;
 
