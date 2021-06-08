@@ -5,16 +5,16 @@ import javax.swing.ImageIcon;
 import spriteframework.sprite.BadSprite;
 
 
-public class Shot extends BadSprite {
+public class DefenderShot extends BadSprite {
 
-    public Shot() {}
+    public DefenderShot() {}
 
-    public Shot(int x, int y) {
+    public DefenderShot(int x, int y) {
         initShot(x, y);
     }
 
     private void initShot(int x, int y) {
-        String shotImg = "src/images/shot.png";
+        String shotImg = "src/images/defenderShot.png";
         ImageIcon ii = new ImageIcon(shotImg);
         setImage(ii.getImage());
 

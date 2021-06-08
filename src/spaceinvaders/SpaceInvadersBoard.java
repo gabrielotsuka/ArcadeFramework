@@ -4,7 +4,7 @@ package spaceinvaders;
 import spaceinvaders.sprite.Bomb;
 import spaceinvaders.sprite.Defender;
 import spaceinvaders.sprite.Invader;
-import spaceinvaders.sprite.Shot;
+import spaceinvaders.sprite.DefenderShot;
 import spriteframework.AbstractBoard;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.Player;
@@ -15,9 +15,9 @@ import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import java.util.Random;
 
-public class SpaceInvadersBoard extends AbstractBoard{  
+public class SpaceInvadersBoard extends AbstractBoard{
 
-    private Shot shot = createShot();
+    private DefenderShot defenderShot = createShot();
     private int direction = -1;
 
     private final String explImg = "src/images/explosion.png";
@@ -41,22 +41,21 @@ public class SpaceInvadersBoard extends AbstractBoard{
             }
         }
     }
-    
+
     protected void createOtherSprites() {
-        shot = new Shot();
+        defenderShot = new DefenderShot();
     }
 
     private void drawShot(Graphics g) {
-        if (shot.isVisible()) {
-            g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+        if (defenderShot.isVisible()) {
+            g.drawImage(defenderShot.getImage(), defenderShot.getX(), defenderShot.getY(), this);
         }
     }
 
-    // Override
     protected void drawOtherSprites(Graphics g) {
-            drawShot(g);
+        drawShot(g);
     }
-    
+
     protected void processOtherSprites(Player player, KeyEvent e) {
 		int x = player.getX();
 		int y = player.getY();
@@ -65,12 +64,17 @@ public class SpaceInvadersBoard extends AbstractBoard{
 
 		if (key == KeyEvent.VK_SPACE) {
 			if (inGame) {
-				if (!shot.isVisible()) {
-					shot = new Shot(x, y);
+				if (!defenderShot.isVisible()) {
+					defenderShot = new DefenderShot(x, y);
 				}
 			}
 		}
 	}
+
+    @Override
+    protected DefenderShot createShot() {
+        return new DefenderShot();
+    }
 
     @Override
     protected void gameOver(Graphics2D g) {
@@ -99,16 +103,16 @@ public class SpaceInvadersBoard extends AbstractBoard{
         	player.act();
 
         // shot
-        if (shot.isVisible()) {
+        if (defenderShot.isVisible()) {
 
-            int shotX = shot.getX();
-            int shotY = shot.getY();
+            int shotX = defenderShot.getX();
+            int shotY = defenderShot.getY();
 
             for (BadSprite alien : badSprites) {
                 int alienX = alien.getX();
                 int alienY = alien.getY();
 
-                if (alien.isVisible() && shot.isVisible()) {
+                if (alien.isVisible() && defenderShot.isVisible()) {
                     if (
                         shotX >= (alienX) &&
                         shotX <= (alienX + Commons.ALIEN_WIDTH) &&
@@ -119,18 +123,18 @@ public class SpaceInvadersBoard extends AbstractBoard{
                         alien.setImage(ii.getImage());
                         alien.setDying(true);
                         deaths++;
-                        shot.die();
+                        defenderShot.die();
                     }
                 }
             }
 
-            int y = shot.getY();
+            int y = defenderShot.getY();
             y -= 4;
 
             if (y < 0) {
-                shot.die();
+                defenderShot.die();
             } else {
-                shot.setY(y);
+                defenderShot.setY(y);
             }
         }
 

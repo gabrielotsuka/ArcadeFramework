@@ -1,6 +1,6 @@
 package spriteframework;
 
-import spaceinvaders.sprite.Shot;
+import spaceinvaders.sprite.DefenderShot;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.Player;
 
@@ -34,6 +34,8 @@ public abstract class AbstractBoard extends JPanel {
     protected abstract void doDrawing(Graphics g);
     protected abstract void update();
     protected abstract void processOtherSprites(Player player, KeyEvent e);
+    protected abstract BadSprite createShot();
+
     protected abstract void gameOver(Graphics2D g);
 
     public AbstractBoard() {
@@ -58,10 +60,6 @@ public abstract class AbstractBoard extends JPanel {
 		players = new LinkedList<>();
         players.add(createPlayer());
 	}
-
-    protected Shot createShot() {
-        return new Shot();
-    }
 
     @Override
     public void paintComponent(Graphics g) {
