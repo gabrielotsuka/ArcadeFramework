@@ -7,11 +7,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import static freezeMonsters.Commons.*;
+
 public class Woody extends Player {
     @Override
     public void loadImage() {
         ImageIcon ii = new ImageIcon("src/images/woody.png");
-        Image scaledImage = ii.getImage().getScaledInstance(30, 50, Image.SCALE_SMOOTH);
+        Image scaledImage = ii.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH);
         setImage(scaledImage);
     }
 
@@ -22,14 +24,14 @@ public class Woody extends Player {
         if (x <= 2) {
             x = 2;
         }
-        if (x >= Commons.BOARD_WIDTH - 2 * width) {
-            x = Commons.BOARD_WIDTH - 2 * width;
+        if (x >= BOARD_WIDTH - IMAGE_WIDTH) {
+            x = BOARD_WIDTH - IMAGE_WIDTH;
         }
         if (y <= 2) {
             y = 2;
         }
-        if (y >= Commons.BOARD_HEIGHT - 2 * width) {
-            x = Commons.BOARD_HEIGHT - 2 * width;
+        if (y >= BOARD_HEIGHT - 2 * IMAGE_HEIGHT) {
+            y = BOARD_HEIGHT - 2 * IMAGE_HEIGHT;
         }
     }
 
@@ -43,10 +45,10 @@ public class Woody extends Player {
             dx = 2;
         }
         if (key == KeyEvent.VK_UP) {
-            dy = 2;
+            dy = -2;
         }
         if (key == KeyEvent.VK_DOWN) {
-            dy = -2;
+            dy = 2;
         }
     }
 
@@ -60,10 +62,10 @@ public class Woody extends Player {
             dx = 0;
         }
         if (key == KeyEvent.VK_UP) {
-            dx = 0;
+            dy = 0;
         }
         if (key == KeyEvent.VK_DOWN) {
-            dx = 0;
+            dy = 0;
         }
     }
 }

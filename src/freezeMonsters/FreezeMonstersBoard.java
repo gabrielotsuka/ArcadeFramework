@@ -7,10 +7,12 @@ import spriteframework.sprite.Player;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import static freezeMonsters.Commons.*;
+
 public class FreezeMonstersBoard extends AbstractBoard {
 
     public FreezeMonstersBoard() {
-        d = new Dimension(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
+        d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
         setBackground(Color.green);
     }
 
@@ -43,7 +45,6 @@ public class FreezeMonstersBoard extends AbstractBoard {
         g.fillRect(0,0,d.width, d.height);
 
         if (inGame) {
-            g.drawLine(0, spaceinvaders.Commons.GROUND, spaceinvaders.Commons.BOARD_WIDTH, spaceinvaders.Commons.GROUND);
             drawPlayers(g);
         } else {
             if (timer.isRunning()) {
@@ -69,7 +70,14 @@ public class FreezeMonstersBoard extends AbstractBoard {
 
     @Override
     protected void update() {
+        if (deaths == NUMBER_OF_MONSTERS_TO_DESTROY) {
+            inGame = false;
+            timer.stop();
+            message = "Game won!";
+        }
 
+        for (Player player: players)
+            player.act();
     }
 
     @Override

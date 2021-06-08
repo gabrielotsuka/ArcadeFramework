@@ -10,7 +10,7 @@ public class Defender extends Player {
 
     public void loadImage () {
         ImageIcon ii = new ImageIcon("src/images/defender.png");
-        width = ii.getImage().getWidth(null);
+        imageWidth = ii.getImage().getWidth(null);
         setImage(ii.getImage());
     }
 
@@ -19,8 +19,8 @@ public class Defender extends Player {
         if (x <= 2) {
             x = 2;
         }
-        if (x >= Commons.BOARD_WIDTH - 2 * width) {
-            x = Commons.BOARD_WIDTH - 2 * width;
+        if (x >= Commons.BOARD_WIDTH - imageWidth) {
+            x = Commons.BOARD_WIDTH - imageWidth;
         }
     }
 

@@ -19,7 +19,6 @@ public class SpaceInvadersBoard extends AbstractBoard{
 
     private Shot shot = createShot();
     private int direction = -1;
-    private int deaths = 0;
 
     private final String explImg = "src/images/explosion.png";
 

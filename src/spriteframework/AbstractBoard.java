@@ -21,10 +21,11 @@ public abstract class AbstractBoard extends JPanel {
     protected LinkedList<Player> players;
     protected LinkedList<BadSprite> badSprites;
     
-    private int numberPlayers;
+    protected int numberPlayers;
     protected boolean inGame = true;
     protected String message = "Game Over";
     protected Timer timer;
+    protected int deaths = 0;
 
     protected abstract Player createPlayer();
     protected abstract void createBadSprites();
