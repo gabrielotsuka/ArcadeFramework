@@ -12,7 +12,7 @@ public class Woody extends Player {
     @Override
     public void loadImage() {
         ImageIcon ii = new ImageIcon("src/images/woody.png");
-        Image scaledImage = ii.getImage().getScaledInstance(WOODY_WIDTH, WOODY_HEIGHT, Image.SCALE_SMOOTH);
+        Image scaledImage = ii.getImage().getScaledInstance(SPRITE_WIDTH, SPRITE_HEIGHT, Image.SCALE_SMOOTH);
         setImage(scaledImage);
     }
 
@@ -23,14 +23,14 @@ public class Woody extends Player {
         if (x <= 2) {
             x = 2;
         }
-        if (x >= BOARD_WIDTH - WOODY_WIDTH) {
-            x = BOARD_WIDTH - WOODY_WIDTH;
+        if (x >= BOARD_WIDTH - SPRITE_WIDTH) {
+            x = BOARD_WIDTH - SPRITE_WIDTH;
         }
         if (y <= 2) {
             y = 2;
         }
-        if (y >= BOARD_HEIGHT - WOODY_HEIGHT - 35) {
-            y = BOARD_HEIGHT - WOODY_HEIGHT - 35;
+        if (y >= BOARD_HEIGHT - SPRITE_HEIGHT - 35) {
+            y = BOARD_HEIGHT - SPRITE_HEIGHT - 35;
         }
     }
 

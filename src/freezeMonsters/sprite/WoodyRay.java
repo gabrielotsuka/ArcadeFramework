@@ -17,7 +17,7 @@ public class WoodyRay extends BadSprite {
 
     private void initShot(int x, int y) {
         ImageIcon ii = new ImageIcon("src/images/ray.png");
-        Image scaledImage = ii.getImage().getScaledInstance(RAY_WIDTH, RAY_HEIGHT, Image.SCALE_SMOOTH);
+        Image scaledImage = ii.getImage().getScaledInstance(SHOT_WIDTH, SHOT_HEIGHT, Image.SCALE_SMOOTH);
         setImage(scaledImage);
 
         int H_SPACE = 6;

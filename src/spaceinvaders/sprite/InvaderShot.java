@@ -9,17 +9,17 @@ public class InvaderShot extends BadSprite {
     private boolean destroyed;
 
     public InvaderShot(int x, int y) {
-        initBomb(x, y);
+        initInvaderShot(x, y);
     }
 
-    private void initBomb(int x, int y) {
+    private void initInvaderShot(int x, int y) {
         setDestroyed(true);
 
         this.x = x;
         this.y = y;
 
-        String bombImg = "src/images/bomb.png";
-        ImageIcon ii = new ImageIcon(bombImg);
+        String invaderShot = "src/images/invaderShot.png";
+        ImageIcon ii = new ImageIcon(invaderShot);
         setImage(ii.getImage());
     }
 

@@ -12,10 +12,10 @@ public class Invader extends BadnessBoxSprite {
     private InvaderShot invaderShot;
 
     public Invader(int x, int y) {
-        initBomber(x, y);
+        initInvader(x, y);
     }
 
-    private void initBomber(int x, int y) {
+    private void initInvader(int x, int y) {
         this.x = x;
         this.y = y;
 
@@ -26,13 +26,13 @@ public class Invader extends BadnessBoxSprite {
         setImage(ii.getImage());
     }
 
-    public InvaderShot getBomb() {
+    public InvaderShot getInvaderShot() {
         return invaderShot;
     }
 
 	@Override
 	public LinkedList<BadSprite> getBadnesses() {
-		LinkedList<BadSprite> aBomb = new LinkedList<BadSprite>();
+		LinkedList<BadSprite> aBomb = new LinkedList<>();
 		aBomb.add(invaderShot);
 		return aBomb;
 	}

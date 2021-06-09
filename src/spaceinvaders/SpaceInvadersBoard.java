@@ -191,7 +191,7 @@ public class SpaceInvadersBoard extends AbstractBoard{
 
         for (BadSprite alien : badSprites) {
             int shot = generator.nextInt(15);
-            InvaderShot invaderShot = ((Invader)alien).getBomb();
+            InvaderShot invaderShot = ((Invader)alien).getInvaderShot();
 
             if (shot == Commons.CHANCE && alien.isVisible() && invaderShot.isDestroyed()) {
                 invaderShot.setDestroyed(false);
