@@ -1,7 +1,7 @@
 package spaceinvaders;
 
 
-import spaceinvaders.sprite.Bomb;
+import spaceinvaders.sprite.InvaderShot;
 import spaceinvaders.sprite.Defender;
 import spaceinvaders.sprite.Invader;
 import spaceinvaders.sprite.DefenderShot;
@@ -191,20 +191,20 @@ public class SpaceInvadersBoard extends AbstractBoard{
 
         for (BadSprite alien : badSprites) {
             int shot = generator.nextInt(15);
-            Bomb bomb = ((Invader)alien).getBomb();
+            InvaderShot invaderShot = ((Invader)alien).getBomb();
 
-            if (shot == Commons.CHANCE && alien.isVisible() && bomb.isDestroyed()) {
-                bomb.setDestroyed(false);
-                bomb.setX(alien.getX());
-                bomb.setY(alien.getY());
+            if (shot == Commons.CHANCE && alien.isVisible() && invaderShot.isDestroyed()) {
+                invaderShot.setDestroyed(false);
+                invaderShot.setX(alien.getX());
+                invaderShot.setY(alien.getY());
             }
 
-            int bombX = bomb.getX();
-            int bombY = bomb.getY();
+            int bombX = invaderShot.getX();
+            int bombY = invaderShot.getY();
             int playerX = players.get(0).getX();
             int playerY = players.get(0).getY();
 
-            if (players.get(0).isVisible() && !bomb.isDestroyed()) {
+            if (players.get(0).isVisible() && !invaderShot.isDestroyed()) {
                 if (
                         bombX >= (playerX) &&
                         bombX <= (playerX + Commons.PLAYER_WIDTH) &&
@@ -214,14 +214,14 @@ public class SpaceInvadersBoard extends AbstractBoard{
                     ImageIcon ii = new ImageIcon(explImg);
                     players.get(0).setImage(ii.getImage());
                     players.get(0).setDying(true);
-                    bomb.setDestroyed(true);
+                    invaderShot.setDestroyed(true);
                 }
             }
 
-            if (!bomb.isDestroyed()) {
-                bomb.setY(bomb.getY() + 1);
-                if (bomb.getY() >= Commons.GROUND - Commons.BOMB_HEIGHT) {
-                    bomb.setDestroyed(true);
+            if (!invaderShot.isDestroyed()) {
+                invaderShot.setY(invaderShot.getY() + 1);
+                if (invaderShot.getY() >= Commons.GROUND - Commons.BOMB_HEIGHT) {
+                    invaderShot.setDestroyed(true);
                 }
             }
         }

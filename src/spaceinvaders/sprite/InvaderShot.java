@@ -4,11 +4,11 @@ import javax.swing.ImageIcon;
 
 import spriteframework.sprite.BadSprite;
 
-public class Bomb extends BadSprite {
+public class InvaderShot extends BadSprite {
 
     private boolean destroyed;
 
-    public Bomb(int x, int y) {
+    public InvaderShot(int x, int y) {
         initBomb(x, y);
     }
 

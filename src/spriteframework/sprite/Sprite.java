@@ -89,4 +89,12 @@ public class Sprite {
     public void moveY(int direction) {
         this.y += direction;
     }
+
+    public int getDx() {
+        return dx;
+    }
+
+    public int getDy() {
+        return dy;
+    }
 }

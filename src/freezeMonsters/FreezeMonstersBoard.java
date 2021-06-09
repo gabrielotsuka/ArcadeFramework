@@ -14,6 +14,8 @@ import static freezeMonsters.Commons.*;
 public class FreezeMonstersBoard extends AbstractBoard {
 
     private WoodyRay woodyRay = createShot();
+    private int rayDirectionX = -1;
+    private int rayDirectionY = -1;
 
     public FreezeMonstersBoard() {
         d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
@@ -122,12 +124,19 @@ public class FreezeMonstersBoard extends AbstractBoard {
             }
 
             int y = woodyRay.getY();
-            y -= 4;
+            if (rayDirectionX == 0 && rayDirectionY == 0) {
+                rayDirectionX = players.get(0).getDx();
+                rayDirectionY = players.get(0).getDy();
+            }
+            y += rayDirectionY;
+            int x = woodyRay.getX();
+            x += rayDirectionX;
 
-            if (y < 0) {
+            if (y < 0 || y > BOARD_HEIGHT || x < 0 || x > BOARD_WIDTH) {
                 woodyRay.die();
             } else {
                 woodyRay.setY(y);
+                woodyRay.setX(x);
             }
         }
     }
@@ -142,6 +151,8 @@ public class FreezeMonstersBoard extends AbstractBoard {
         if (key == KeyEvent.VK_SPACE) {
             if (inGame) {
                 if (!woodyRay.isVisible()) {
+                    rayDirectionX = player.getDx();
+                    rayDirectionY = player.getDy();
                     woodyRay = new WoodyRay(x, y);
                 }
             }
