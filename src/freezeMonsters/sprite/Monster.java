@@ -29,9 +29,8 @@ public class Monster extends BadnessBoxSprite {
 
         monsterShot = new MonsterShot(x, y);
 
-        ImageIcon ii = new ImageIcon("src/images/monster" + id + ".png");
-        Image scaledImage = ii.getImage().getScaledInstance(SPRITE_WIDTH, SPRITE_HEIGHT, Image.SCALE_SMOOTH);
-        setImage(scaledImage);
+        ImageIcon ii = new ImageIcon("src/images/2monster" + id + ".png");
+        setImage(ii.getImage());
     }
 
     public MonsterShot getMonsterShot() {
@@ -51,9 +50,8 @@ public class Monster extends BadnessBoxSprite {
 
     @Override
     public void die() {
-        ImageIcon ii = new ImageIcon("src/images/monster" + monsterId + "bg.png");
-        Image scaledImage = ii.getImage().getScaledInstance(SPRITE_WIDTH, SPRITE_HEIGHT, Image.SCALE_SMOOTH);
-        setImage(scaledImage);
+        ImageIcon ii = new ImageIcon("src/images/2monster" + monsterId + "bg.png");
+        setImage(ii.getImage());
         setVisible(false);
         setDestroyed(true);
     }

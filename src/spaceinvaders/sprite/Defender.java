@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 public class Defender extends Player {
 
     public void loadImage () {
-        ImageIcon ii = new ImageIcon("src/images/defender.png");
+        ImageIcon ii = new ImageIcon("src/images/2defender.png");
         imageWidth = ii.getImage().getWidth(null);
         setImage(ii.getImage());
     }

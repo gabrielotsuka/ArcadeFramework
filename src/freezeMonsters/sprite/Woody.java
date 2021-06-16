@@ -11,9 +11,8 @@ import static freezeMonsters.Commons.*;
 public class Woody extends Player {
     @Override
     public void loadImage() {
-        ImageIcon ii = new ImageIcon("src/images/woody.png");
-        Image scaledImage = ii.getImage().getScaledInstance(SPRITE_WIDTH, SPRITE_HEIGHT, Image.SCALE_SMOOTH);
-        setImage(scaledImage);
+        ImageIcon ii = new ImageIcon("src/images/2woody.png");
+        setImage(ii.getImage());
     }
 
     @Override

@@ -21,7 +21,7 @@ public class Invader extends BadnessBoxSprite {
 
         invaderShot = new InvaderShot(x, y);
 
-        String alienImg = "src/images/alien.png";
+        String alienImg = "src/images/2alien.png";
         ImageIcon ii = new ImageIcon(alienImg);
         setImage(ii.getImage());
     }

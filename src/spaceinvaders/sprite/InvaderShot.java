@@ -18,7 +18,7 @@ public class InvaderShot extends BadSprite {
         this.x = x;
         this.y = y;
 
-        String invaderShot = "src/images/invaderShot.png";
+        String invaderShot = "src/images/2invaderShot.png";
         ImageIcon ii = new ImageIcon(invaderShot);
         setImage(ii.getImage());
     }

@@ -14,7 +14,7 @@ public class DefenderShot extends BadSprite {
     }
 
     private void initShot(int x, int y) {
-        String shotImg = "src/images/defenderShot.png";
+        String shotImg = "src/images/2defenderShot.png";
         ImageIcon ii = new ImageIcon(shotImg);
         setImage(ii.getImage());
 
