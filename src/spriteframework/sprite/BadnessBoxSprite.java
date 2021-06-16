@@ -3,15 +3,25 @@ package spriteframework.sprite;
 
 import java.util.LinkedList;
 
-public class BadnessBoxSprite  extends BadSprite {
-     LinkedList<BadSprite>  badnesses = new LinkedList<>();
-     
-     void add(BadSprite b) {
-    	 badnesses.add(b);
-     }
+public class BadnessBoxSprite extends BadSprite {
+    private boolean destroyed = false;
 
-     public LinkedList<BadSprite>  getBadnesses() {
-    	 return badnesses;
-     }
-     
+    LinkedList<BadSprite> badnesses = new LinkedList<>();
+
+    protected void addBadness(BadSprite b) {
+        badnesses.add(b);
+    }
+
+    public LinkedList<BadSprite> getBadnesses() {
+        return badnesses;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
+    }
 }

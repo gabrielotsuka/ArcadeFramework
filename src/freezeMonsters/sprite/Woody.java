@@ -11,9 +11,8 @@ import static freezeMonsters.Commons.*;
 public class Woody extends Player {
     @Override
     public void loadImage() {
-        ImageIcon ii = new ImageIcon("src/images/woody.png");
-        Image scaledImage = ii.getImage().getScaledInstance(SPRITE_WIDTH, SPRITE_HEIGHT, Image.SCALE_SMOOTH);
-        setImage(scaledImage);
+        ImageIcon ii = new ImageIcon("src/images/2woody.png");
+        setImage(ii.getImage());
     }
 
     @Override
@@ -23,14 +22,14 @@ public class Woody extends Player {
         if (x <= 2) {
             x = 2;
         }
-        if (x >= BOARD_WIDTH - SPRITE_WIDTH) {
-            x = BOARD_WIDTH - SPRITE_WIDTH;
+        if (x >= SPRITE_RIGHT_BORDER) {
+            x = SPRITE_RIGHT_BORDER;
         }
         if (y <= 2) {
             y = 2;
         }
-        if (y >= BOARD_HEIGHT - SPRITE_HEIGHT - 35) {
-            y = BOARD_HEIGHT - SPRITE_HEIGHT - 35;
+        if (y >= SPRITE_DOWN_BORDER) {
+            y = SPRITE_DOWN_BORDER;
         }
     }
 

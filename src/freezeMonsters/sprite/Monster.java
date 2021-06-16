@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Timer;
 
 import static freezeMonsters.Commons.*;
 
@@ -16,21 +17,20 @@ public class Monster extends BadnessBoxSprite {
 
     public MonsterShot monsterShot;
 
-    public Monster(int x, int y) {
-        initMonster(x, y);
+    public Monster(int id, int x, int y) {
+        initMonster(id, x, y);
     }
 
-    private void initMonster(int x, int y) {
+    private void initMonster(int id, int x, int y) {
         Random generator = new Random();
-        monsterId = generator.nextInt(10)+1;
+        monsterId = id;
         this.x = x;
         this.y = y;
 
         monsterShot = new MonsterShot(x, y);
 
-        ImageIcon ii = new ImageIcon("src/images/monster" + monsterId + ".png");
-        Image scaledImage = ii.getImage().getScaledInstance(SPRITE_WIDTH, SPRITE_HEIGHT, Image.SCALE_SMOOTH);
-        setImage(scaledImage);
+        ImageIcon ii = new ImageIcon("src/images/2monster" + id + ".png");
+        setImage(ii.getImage());
     }
 
     public MonsterShot getMonsterShot() {
@@ -46,5 +46,13 @@ public class Monster extends BadnessBoxSprite {
         LinkedList<BadSprite> aBomb = new LinkedList<>();
         aBomb.add(monsterShot);
         return aBomb;
+    }
+
+    @Override
+    public void die() {
+        ImageIcon ii = new ImageIcon("src/images/2monster" + monsterId + "bg.png");
+        setImage(ii.getImage());
+        setVisible(false);
+        setDestroyed(true);
     }
 }

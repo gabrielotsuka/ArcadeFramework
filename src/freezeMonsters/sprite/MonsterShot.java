@@ -21,9 +21,8 @@ public class MonsterShot extends BadSprite {
         this.x = x;
         this.y = y;
 
-        ImageIcon ii = new ImageIcon("src/images/monsterShot.png");
-        Image scaledImage = ii.getImage().getScaledInstance(SHOT_WIDTH, SHOT_HEIGHT, Image.SCALE_SMOOTH);
-        setImage(scaledImage);
+        ImageIcon ii = new ImageIcon("src/images/2monsterShot.png");
+        setImage(ii.getImage());
     }
 
     public void setDestroyed(boolean destroyed) {

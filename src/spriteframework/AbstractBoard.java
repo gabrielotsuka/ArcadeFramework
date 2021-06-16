@@ -54,6 +54,7 @@ public abstract class AbstractBoard extends JPanel {
 
         timer = new Timer(Commons.DELAY, new GameCycle());
         timer.start();
+
     }
 
     protected void createPlayers() {
