@@ -13,8 +13,10 @@ public class Sprite {
     protected int y;
     protected int imageWidth;
     protected int imageHeight;
-    protected int dx;
-    protected int dy;
+    protected int dx = 0;
+    protected int dy = 0;
+
+    protected long lastTimeMoved;
 
     public Sprite() {
         visible = true;
@@ -83,11 +85,15 @@ public class Sprite {
     }
     
     public void moveX(int direction) {
+
         this.x += direction;
+        this.dx = direction;
     }
     
     public void moveY(int direction) {
+
         this.y += direction;
+        this.dy = direction;
     }
 
     public int getDx() {
@@ -96,5 +102,29 @@ public class Sprite {
 
     public int getDy() {
         return dy;
+    }
+
+    public long getLastTimeMoved(){
+        return lastTimeMoved;
+    }
+
+    public void setLastTimeMoved(long lastTimeMoved) {
+        this.lastTimeMoved = lastTimeMoved;
+    }
+
+    public int getNextX(int dx) {
+        return this.x + dx;
+    }
+
+    public int getNextX() {
+        return this.x + this.dx;
+    }
+
+    public int getNextY(int dy) {
+        return this.y + dy;
+    }
+
+    public int getNextY() {
+        return this.y + this.dy;
     }
 }

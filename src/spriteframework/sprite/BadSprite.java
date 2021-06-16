@@ -9,7 +9,19 @@ public abstract class BadSprite extends Sprite {
 	public boolean isDestroyed() {
 		return false;
 	}
-	public void act (int direction) {
-		this.x += direction;
+
+	public void act() {
+		moveX(this.dx);
+		moveY(this.dy);
+	}
+
+	public void act(int directionX) {
+		moveX(directionX);
+		moveY(this.dy);
+	}
+
+	public void act(int directionX, int directionY) {
+		moveX(directionX);
+		moveY(directionY);
 	}
 }

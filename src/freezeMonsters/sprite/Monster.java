@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Timer;
 
 import static freezeMonsters.Commons.*;
 
@@ -22,7 +23,7 @@ public class Monster extends BadnessBoxSprite {
 
     private void initMonster(int x, int y) {
         Random generator = new Random();
-        monsterId = generator.nextInt(10)+1;
+        monsterId = generator.nextInt(9)+1;
         this.x = x;
         this.y = y;
 
@@ -46,5 +47,14 @@ public class Monster extends BadnessBoxSprite {
         LinkedList<BadSprite> aBomb = new LinkedList<>();
         aBomb.add(monsterShot);
         return aBomb;
+    }
+
+    @Override
+    public void die() {
+        ImageIcon ii = new ImageIcon("src/images/monster" + monsterId + "bg.png");
+        Image scaledImage = ii.getImage().getScaledInstance(SPRITE_WIDTH, SPRITE_HEIGHT, Image.SCALE_SMOOTH);
+        setImage(scaledImage);
+        setVisible(false);
+        setDestroyed(true);
     }
 }

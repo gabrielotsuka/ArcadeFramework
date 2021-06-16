@@ -1,13 +1,17 @@
 package freezeMonsters;
 
+import freezeMonsters.sprite.Monster;
 import freezeMonsters.sprite.Woody;
 import freezeMonsters.sprite.WoodyRay;
 import spriteframework.AbstractBoard;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.Player;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.sql.Timestamp;
+import java.util.Random;
 
 import static freezeMonsters.Commons.*;
 
@@ -29,7 +33,15 @@ public class FreezeMonstersBoard extends AbstractBoard {
 
     @Override
     protected void createBadSprites() {
-
+        Random generator = new Random();
+        for (int i=0; i<1; i++) {
+            int monsterX = 0;
+//            generator.nextInt(BOARD_WIDTH - SPRITE_WIDTH - 1) + 1;
+            int monsterY = 0;
+//            generator.nextInt(BOARD_HEIGHT - SPRITE_HEIGHT - 29) + 1;
+            Monster monster = new Monster(monsterX, monsterY);
+            badSprites.add(monster);
+        }
     }
 
     @Override
@@ -53,6 +65,24 @@ public class FreezeMonstersBoard extends AbstractBoard {
         }
     }
 
+    private void drawBadSprites(Graphics g) {
+        for (BadSprite bad : badSprites) {
+            if (bad.isVisible() || bad.isDestroyed()) {
+                g.drawImage(bad.getImage(), bad.getX(), bad.getY(), this);
+            }
+            if (bad.isDying()) {
+                bad.die();
+            }
+            if (bad.getBadnesses()!= null) {
+                for (BadSprite badness: bad.getBadnesses()) {
+                    if (!badness.isDestroyed()) {
+                        g.drawImage(badness.getImage(), badness.getX(), badness.getY(), this);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     protected void doDrawing(Graphics g1) {
         g = (Graphics2D) g1;
@@ -63,6 +93,7 @@ public class FreezeMonstersBoard extends AbstractBoard {
 
         if (inGame) {
             drawPlayers(g);
+            drawBadSprites(g);
             drawOtherSprites(g);
         } else {
             if (timer.isRunning()) {
@@ -94,42 +125,40 @@ public class FreezeMonstersBoard extends AbstractBoard {
             message = "Game won!";
         }
 
+        // Player
         for (Player player: players)
             player.act();
 
-        // shot
+        // Shot
         if (woodyRay.isVisible()) {
 
             int shotX = woodyRay.getX();
             int shotY = woodyRay.getY();
 
-            for (BadSprite alien : badSprites) {
-                int alienX = alien.getX();
-                int alienY = alien.getY();
+            for (BadSprite monster : badSprites) {
+                int monsterX = monster.getX();
+                int monsterY = monster.getY();
 
-                if (alien.isVisible() && woodyRay.isVisible()) {
+                if (!monster.isDestroyed() && woodyRay.isVisible()) {
                     if (
-                            shotX >= (alienX) &&
-                                    shotX <= (alienX + spaceinvaders.Commons.ALIEN_WIDTH) &&
-                                    shotY >= (alienY) &&
-                                    shotY <= (alienY + spaceinvaders.Commons.ALIEN_HEIGHT)
+                            shotX >= (monsterX) &&
+                                    shotX <= (monsterX + spaceinvaders.Commons.ALIEN_WIDTH) &&
+                                    shotY >= (monsterY) &&
+                                    shotY <= (monsterY + spaceinvaders.Commons.ALIEN_HEIGHT)
                     ) {
-//                        ImageIcon ii = new ImageIcon(explImg);
-//                        alien.setImage(ii.getImage());
-                        alien.setDying(true);
+                        monster.setDying(true);
                         deaths++;
                         woodyRay.die();
                     }
                 }
             }
 
-            int y = woodyRay.getY();
             if (rayDirectionX == 0 && rayDirectionY == 0) {
                 rayDirectionX = players.get(0).getDx();
                 rayDirectionY = players.get(0).getDy();
             }
+            int y = woodyRay.getY(), x = woodyRay.getX();
             y += rayDirectionY;
-            int x = woodyRay.getX();
             x += rayDirectionX;
 
             if (y < 0 || y > BOARD_HEIGHT || x < 0 || x > BOARD_WIDTH) {
@@ -138,6 +167,24 @@ public class FreezeMonstersBoard extends AbstractBoard {
                 woodyRay.setY(y);
                 woodyRay.setX(x);
             }
+        }
+
+        // Monsters
+        Timestamp time = new Timestamp(System.currentTimeMillis());
+        for (BadSprite bad : badSprites) {
+            if(time.getTime() - bad.getLastTimeMoved() <= 1000 && (bad.getNextX() > SPRITE_WIDTH && bad.getNextX() < BOARD_WIDTH-SPRITE_WIDTH && bad.getNextY() > SPRITE_HEIGHT && bad.getNextY() < BOARD_HEIGHT-SPRITE_HEIGHT)) {
+                bad.act();
+                continue ;
+            }
+            int dx, dy;
+            do {
+                Random generate = new Random();
+                dx = generate.nextInt(3) -1; // [-1, 1];
+                dy = generate.nextInt(3) -1; // [-1, 1];
+            } while (!(bad.getNextX(dx) > SPRITE_WIDTH && bad.getNextX(dx) < BOARD_WIDTH-SPRITE_WIDTH && bad.getNextY(dy) > SPRITE_HEIGHT && bad.getNextY(dy) < BOARD_HEIGHT-SPRITE_HEIGHT));
+
+            bad.setLastTimeMoved(time.getTime());
+            bad.act(dx, dy);
         }
     }
 

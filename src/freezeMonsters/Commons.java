@@ -10,5 +10,5 @@ public interface Commons extends spriteframework.Commons {
     int SHOT_WIDTH = 30;
     int SHOT_HEIGHT = 30;
 
-    int NUMBER_OF_MONSTERS_TO_DESTROY = 10;
+    int NUMBER_OF_MONSTERS_TO_DESTROY = 4;
 }
