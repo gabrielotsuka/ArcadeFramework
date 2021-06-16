@@ -23,7 +23,7 @@ public class Monster extends BadnessBoxSprite {
 
     private void initMonster(int id, int x, int y) {
         Random generator = new Random();
-        monsterId = generator.nextInt(9)+1;
+        monsterId = id;
         this.x = x;
         this.y = y;
 

@@ -20,7 +20,7 @@ public class SpaceInvadersBoard extends AbstractBoard{
     private DefenderShot defenderShot = createShot();
     private int direction = -1;
 
-    private final String explImg = "src/images/2explosion.png";
+    private final String explImg = "src/images/explosion.png";
 
     public SpaceInvadersBoard() {
         d = new Dimension(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
