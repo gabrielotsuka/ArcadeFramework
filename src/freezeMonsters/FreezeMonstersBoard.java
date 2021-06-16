@@ -1,8 +1,11 @@
 package freezeMonsters;
 
 import freezeMonsters.sprite.Monster;
+import freezeMonsters.sprite.MonsterShot;
 import freezeMonsters.sprite.Woody;
 import freezeMonsters.sprite.WoodyRay;
+import spaceinvaders.sprite.Invader;
+import spaceinvaders.sprite.InvaderShot;
 import spriteframework.AbstractBoard;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.Player;
@@ -34,12 +37,10 @@ public class FreezeMonstersBoard extends AbstractBoard {
     @Override
     protected void createBadSprites() {
         Random generator = new Random();
-        for (int i=0; i<1; i++) {
-            int monsterX = 0;
-//            generator.nextInt(BOARD_WIDTH - SPRITE_WIDTH - 1) + 1;
-            int monsterY = 0;
-//            generator.nextInt(BOARD_HEIGHT - SPRITE_HEIGHT - 29) + 1;
-            Monster monster = new Monster(monsterX, monsterY);
+        for (int i=0; i<NUMBER_OF_MONSTERS_TO_DESTROY; i++) {
+            int monsterX = generator.nextInt(SPRITE_RIGHT_BORDER) + 1;
+            int monsterY = generator.nextInt(SPRITE_DOWN_BORDER) + 1;
+            Monster monster = new Monster(i+1, monsterX, monsterY);
             badSprites.add(monster);
         }
     }
@@ -67,7 +68,10 @@ public class FreezeMonstersBoard extends AbstractBoard {
 
     private void drawBadSprites(Graphics g) {
         for (BadSprite bad : badSprites) {
-            if (bad.isVisible() || bad.isDestroyed()) {
+            if (bad.isVisible()) {
+                g.drawImage(bad.getImage(), bad.getX(), bad.getY(), this);
+            }
+            if(bad.isDestroyed()) {
                 g.drawImage(bad.getImage(), bad.getX(), bad.getY(), this);
             }
             if (bad.isDying()) {
@@ -142,9 +146,9 @@ public class FreezeMonstersBoard extends AbstractBoard {
                 if (!monster.isDestroyed() && woodyRay.isVisible()) {
                     if (
                             shotX >= (monsterX) &&
-                                    shotX <= (monsterX + spaceinvaders.Commons.ALIEN_WIDTH) &&
-                                    shotY >= (monsterY) &&
-                                    shotY <= (monsterY + spaceinvaders.Commons.ALIEN_HEIGHT)
+                            shotX <= (monsterX + SPRITE_WIDTH/2) &&
+                            shotY >= (monsterY) &&
+                            shotY <= (monsterY + SPRITE_HEIGHT/2)
                     ) {
                         monster.setDying(true);
                         deaths++;
@@ -172,7 +176,15 @@ public class FreezeMonstersBoard extends AbstractBoard {
         // Monsters
         Timestamp time = new Timestamp(System.currentTimeMillis());
         for (BadSprite bad : badSprites) {
-            if(time.getTime() - bad.getLastTimeMoved() <= 1000 && (bad.getNextX() > SPRITE_WIDTH && bad.getNextX() < BOARD_WIDTH-SPRITE_WIDTH && bad.getNextY() > SPRITE_HEIGHT && bad.getNextY() < BOARD_HEIGHT-SPRITE_HEIGHT)) {
+            if(bad.isDestroyed()) {
+                continue ;
+            }
+            if(time.getTime() - bad.getLastTimeMoved() <= 1000 &&
+                    bad.getNextX() > 0 &&
+                    bad.getNextX() < SPRITE_RIGHT_BORDER &&
+                    bad.getNextY() > 0 &&
+                    bad.getNextY() < SPRITE_DOWN_BORDER
+                ) {
                 bad.act();
                 continue ;
             }
@@ -181,10 +193,55 @@ public class FreezeMonstersBoard extends AbstractBoard {
                 Random generate = new Random();
                 dx = generate.nextInt(3) -1; // [-1, 1];
                 dy = generate.nextInt(3) -1; // [-1, 1];
-            } while (!(bad.getNextX(dx) > SPRITE_WIDTH && bad.getNextX(dx) < BOARD_WIDTH-SPRITE_WIDTH && bad.getNextY(dy) > SPRITE_HEIGHT && bad.getNextY(dy) < BOARD_HEIGHT-SPRITE_HEIGHT));
+            } while (!(bad.getNextX(dx) > 0 && bad.getNextX(dx) < SPRITE_RIGHT_BORDER && bad.getNextY(dy) > 0 && bad.getNextY(dy) < SPRITE_DOWN_BORDER));
 
             bad.setLastTimeMoved(time.getTime());
             bad.act(dx, dy);
+        }
+
+        // Goop
+        Random generator = new Random();
+
+        for (BadSprite monster : badSprites) {
+            int shot = generator.nextInt(15);
+            MonsterShot monsterShot = (MonsterShot)monster.getBadnesses().get(0);
+
+            if (shot == CHANCE && monster.isVisible() && monsterShot.isDestroyed()) {
+                monsterShot.setDestroyed(false);
+                monsterShot.setX(monster.getX());
+                monsterShot.setY(monster.getY());
+                int dx = monster.getDx() * -1, dy = monster.getDy() * -1;
+                if(dx == 0 & dy == 0) dx = 1;
+                monsterShot.setDx(dx);
+                monsterShot.setDy(dy);
+            }
+
+            int shotX = monsterShot.getX();
+            int shotY = monsterShot.getY();
+            int playerX = players.get(0).getX();
+            int playerY = players.get(0).getY();
+
+            if (players.get(0).isVisible() && !monsterShot.isDestroyed()) {
+                if (
+                        shotX >= (playerX) &&
+                                shotX <= (playerX + SPRITE_WIDTH) &&
+                                shotY >= (playerY) &&
+                                shotY <= (playerY + SPRITE_HEIGHT)
+                ) {
+                    players.get(0).setDying(true);
+                    monsterShot.setDestroyed(true);
+                }
+            }
+
+            if (!monsterShot.isDestroyed()) {
+                monsterShot.act();
+                if (monsterShot.getX() < 0 ||
+                    monsterShot.getX() + SHOT_WIDTH > BOARD_WIDTH ||
+                    monsterShot.getY() < 0 ||
+                    monsterShot.getY() + SHOT_HEIGHT > BOARD_HEIGHT) {
+                    monsterShot.setDestroyed(true);
+                }
+            }
         }
     }
 
@@ -208,6 +265,16 @@ public class FreezeMonstersBoard extends AbstractBoard {
 
     @Override
     protected void gameOver(Graphics2D g) {
-
+        g.setColor(Color.black);
+        g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+        g.setColor(new Color(0, 32, 48));
+        g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
+        g.setColor(Color.white);
+        g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
+        Font small = new Font("Helvetica", Font.BOLD, 14);
+        FontMetrics fontMetrics = this.getFontMetrics(small);
+        g.setColor(Color.white);
+        g.setFont(small);
+        g.drawString(message, (BOARD_WIDTH - fontMetrics.stringWidth(message)) / 2, BOARD_WIDTH / 2);
     }
 }

@@ -23,14 +23,14 @@ public class Woody extends Player {
         if (x <= 2) {
             x = 2;
         }
-        if (x >= BOARD_WIDTH - SPRITE_WIDTH) {
-            x = BOARD_WIDTH - SPRITE_WIDTH;
+        if (x >= SPRITE_RIGHT_BORDER) {
+            x = SPRITE_RIGHT_BORDER;
         }
         if (y <= 2) {
             y = 2;
         }
-        if (y >= BOARD_HEIGHT - SPRITE_HEIGHT - 35) {
-            y = BOARD_HEIGHT - SPRITE_HEIGHT - 35;
+        if (y >= SPRITE_DOWN_BORDER) {
+            y = SPRITE_DOWN_BORDER;
         }
     }
 

@@ -17,11 +17,11 @@ public class Monster extends BadnessBoxSprite {
 
     public MonsterShot monsterShot;
 
-    public Monster(int x, int y) {
-        initMonster(x, y);
+    public Monster(int id, int x, int y) {
+        initMonster(id, x, y);
     }
 
-    private void initMonster(int x, int y) {
+    private void initMonster(int id, int x, int y) {
         Random generator = new Random();
         monsterId = generator.nextInt(9)+1;
         this.x = x;
@@ -29,7 +29,7 @@ public class Monster extends BadnessBoxSprite {
 
         monsterShot = new MonsterShot(x, y);
 
-        ImageIcon ii = new ImageIcon("src/images/monster" + monsterId + ".png");
+        ImageIcon ii = new ImageIcon("src/images/monster" + id + ".png");
         Image scaledImage = ii.getImage().getScaledInstance(SPRITE_WIDTH, SPRITE_HEIGHT, Image.SCALE_SMOOTH);
         setImage(scaledImage);
     }

@@ -8,7 +8,7 @@ public class BadnessBoxSprite extends BadSprite {
 
     LinkedList<BadSprite> badnesses = new LinkedList<>();
 
-    void add(BadSprite b) {
+    protected void addBadness(BadSprite b) {
         badnesses.add(b);
     }
 

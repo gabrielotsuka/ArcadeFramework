@@ -104,6 +104,14 @@ public class Sprite {
         return dy;
     }
 
+    public void setDx(int dx) {
+        this.dx = dx;
+    }
+
+    public void setDy(int dy) {
+        this.dy = dy;
+    }
+
     public long getLastTimeMoved(){
         return lastTimeMoved;
     }
