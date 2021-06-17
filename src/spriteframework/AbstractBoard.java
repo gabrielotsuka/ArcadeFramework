@@ -24,7 +24,7 @@ public abstract class AbstractBoard extends JPanel {
     protected boolean inGame = true;
     protected String message = "Game Over";
     protected Timer timer;
-    protected int deaths = 0;
+    protected int enemieDeaths = 0;
 
     protected abstract Player createPlayer();
     protected abstract void createBadnessBoxSprites();

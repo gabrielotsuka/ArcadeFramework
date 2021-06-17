@@ -30,10 +30,15 @@ public class Invader extends BadnessBoxSprite {
         return invaderShot;
     }
 
-	@Override
-	public LinkedList<BadSprite> getBadnesses() {
-		LinkedList<BadSprite> aBomb = new LinkedList<>();
-		aBomb.add(invaderShot);
-		return aBomb;
-	}
+    public void setDeathImage() {
+        ImageIcon ii = new ImageIcon("src/images/explosion.png");
+        this.setImage(ii.getImage());
+    }
+
+    @Override
+    public LinkedList<BadSprite> getBadnesses() {
+        LinkedList<BadSprite> aBomb = new LinkedList<>();
+        aBomb.add(invaderShot);
+        return aBomb;
+    }
 }

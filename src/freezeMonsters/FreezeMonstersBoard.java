@@ -19,11 +19,13 @@ import static freezeMonsters.Commons.*;
 public class FreezeMonstersBoard extends AbstractBoard {
 
     private WoodyRay woodyRay = createBadSprite();
+    private Woody woody;
     private int rayDirectionX = -1;
     private int rayDirectionY = -1;
 
     public FreezeMonstersBoard() {
         super(1, BOARD_WIDTH, BOARD_HEIGHT, Color.green);
+        woody = (Woody) players.get(0);
     }
 
     @Override
@@ -115,57 +117,66 @@ public class FreezeMonstersBoard extends AbstractBoard {
 
     @Override
     protected void update() {
-        if (deaths == NUMBER_OF_MONSTERS_TO_DESTROY) {
+        if (enemieDeaths == NUMBER_OF_MONSTERS_TO_DESTROY) {
             inGame = false;
             timer.stop();
             message = "Game won!";
         }
 
-        // Player
-        for (Player player: players)
-            player.act();
+        woody.act();
+        updateWoodyRay();
 
-        // Shot
-        if (woodyRay.isVisible()) {
+        updateMonsters();
+        updateMonsterShots();
+    }
 
-            int shotX = woodyRay.getX();
-            int shotY = woodyRay.getY();
+    private void updateMonsterShots() {
+        Random generator = new Random();
 
-            for (BadnessBoxSprite monster : badnessBoxSprites) {
-                int monsterX = monster.getX();
-                int monsterY = monster.getY();
+        for (BadnessBoxSprite monster : badnessBoxSprites) {
+            int shot = generator.nextInt(15);
+            MonsterShot monsterShot = (MonsterShot)monster.getBadnesses().get(0);
 
-                if (!monster.isDestroyed() && woodyRay.isVisible()) {
-                    if (
-                            shotX >= (monsterX) &&
-                            shotX <= (monsterX + SPRITE_WIDTH/2) &&
-                            shotY >= (monsterY) &&
-                            shotY <= (monsterY + SPRITE_HEIGHT/2)
-                    ) {
-                        monster.setDying(true);
-                        deaths++;
-                        woodyRay.die();
-                    }
+            if (shot == CHANCE && monster.isVisible() && monsterShot.isDestroyed()) {
+                monsterShot.setDestroyed(false);
+                monsterShot.setX(monster.getX());
+                monsterShot.setY(monster.getY());
+                int dx = monster.getDx() * -1, dy = monster.getDy() * -1;
+                if(dx == 0 & dy == 0) dx = 1;
+                monsterShot.setDx(dx);
+                monsterShot.setDy(dy);
+            }
+
+            int shotX = monsterShot.getX();
+            int shotY = monsterShot.getY();
+            int playerX = woody.getX();
+            int playerY = woody.getY();
+
+            if (woody.isVisible() && !monsterShot.isDestroyed()) {
+                if (
+                        shotX >= (playerX) &&
+                                shotX <= (playerX + SPRITE_WIDTH) &&
+                                shotY >= (playerY) &&
+                                shotY <= (playerY + SPRITE_HEIGHT)
+                ) {
+                    woody.setDying(true);
+                    monsterShot.setDestroyed(true);
                 }
             }
 
-            if (rayDirectionX == 0 && rayDirectionY == 0) {
-                rayDirectionX = players.get(0).getDx();
-                rayDirectionY = players.get(0).getDy();
-            }
-            int y = woodyRay.getY(), x = woodyRay.getX();
-            y += rayDirectionY;
-            x += rayDirectionX;
-
-            if (y < 0 || y > BOARD_HEIGHT || x < 0 || x > BOARD_WIDTH) {
-                woodyRay.die();
-            } else {
-                woodyRay.setY(y);
-                woodyRay.setX(x);
+            if (!monsterShot.isDestroyed()) {
+                monsterShot.act();
+                if (monsterShot.getX() < 0 ||
+                    monsterShot.getX() + SHOT_WIDTH > BOARD_WIDTH ||
+                    monsterShot.getY() < 0 ||
+                    monsterShot.getY() + SHOT_HEIGHT > BOARD_HEIGHT) {
+                    monsterShot.setDestroyed(true);
+                }
             }
         }
+    }
 
-        // Monsters
+    private void updateMonsters() {
         Timestamp time = new Timestamp(System.currentTimeMillis());
         for (BadnessBoxSprite bad : badnessBoxSprites) {
             if(bad.isDestroyed()) {
@@ -190,49 +201,45 @@ public class FreezeMonstersBoard extends AbstractBoard {
             bad.setLastTimeMoved(time.getTime());
             bad.act(dx, dy);
         }
+    }
 
-        // Goop
-        Random generator = new Random();
+    private void updateWoodyRay() {
+        if (woodyRay.isVisible()) {
 
-        for (BadnessBoxSprite monster : badnessBoxSprites) {
-            int shot = generator.nextInt(15);
-            MonsterShot monsterShot = (MonsterShot)monster.getBadnesses().get(0);
+            int shotX = woodyRay.getX();
+            int shotY = woodyRay.getY();
 
-            if (shot == CHANCE && monster.isVisible() && monsterShot.isDestroyed()) {
-                monsterShot.setDestroyed(false);
-                monsterShot.setX(monster.getX());
-                monsterShot.setY(monster.getY());
-                int dx = monster.getDx() * -1, dy = monster.getDy() * -1;
-                if(dx == 0 & dy == 0) dx = 1;
-                monsterShot.setDx(dx);
-                monsterShot.setDy(dy);
-            }
+            for (BadnessBoxSprite monster : badnessBoxSprites) {
+                int monsterX = monster.getX();
+                int monsterY = monster.getY();
 
-            int shotX = monsterShot.getX();
-            int shotY = monsterShot.getY();
-            int playerX = players.get(0).getX();
-            int playerY = players.get(0).getY();
-
-            if (players.get(0).isVisible() && !monsterShot.isDestroyed()) {
-                if (
-                        shotX >= (playerX) &&
-                                shotX <= (playerX + SPRITE_WIDTH) &&
-                                shotY >= (playerY) &&
-                                shotY <= (playerY + SPRITE_HEIGHT)
-                ) {
-                    players.get(0).setDying(true);
-                    monsterShot.setDestroyed(true);
+                if (!monster.isDestroyed() && woodyRay.isVisible()) {
+                    if (
+                            shotX >= (monsterX) &&
+                            shotX <= (monsterX + SPRITE_WIDTH/2) &&
+                            shotY >= (monsterY) &&
+                            shotY <= (monsterY + SPRITE_HEIGHT/2)
+                    ) {
+                        monster.setDying(true);
+                        enemieDeaths++;
+                        woodyRay.die();
+                    }
                 }
             }
 
-            if (!monsterShot.isDestroyed()) {
-                monsterShot.act();
-                if (monsterShot.getX() < 0 ||
-                    monsterShot.getX() + SHOT_WIDTH > BOARD_WIDTH ||
-                    monsterShot.getY() < 0 ||
-                    monsterShot.getY() + SHOT_HEIGHT > BOARD_HEIGHT) {
-                    monsterShot.setDestroyed(true);
-                }
+            if (rayDirectionX == 0 && rayDirectionY == 0) {
+                rayDirectionX = woody.getDx();
+                rayDirectionY = woody.getDy();
+            }
+            int y = woodyRay.getY(), x = woodyRay.getX();
+            y += rayDirectionY;
+            x += rayDirectionX;
+
+            if (y < 0 || y > BOARD_HEIGHT || x < 0 || x > BOARD_WIDTH) {
+                woodyRay.die();
+            } else {
+                woodyRay.setY(y);
+                woodyRay.setX(x);
             }
         }
     }

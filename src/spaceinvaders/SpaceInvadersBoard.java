@@ -1,9 +1,9 @@
 package spaceinvaders;
 
-import spaceinvaders.sprite.InvaderShot;
 import spaceinvaders.sprite.Defender;
-import spaceinvaders.sprite.Invader;
 import spaceinvaders.sprite.DefenderShot;
+import spaceinvaders.sprite.Invader;
+import spaceinvaders.sprite.InvaderShot;
 import spriteframework.AbstractBoard;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.BadnessBoxSprite;
@@ -12,19 +12,19 @@ import spriteframework.sprite.Player;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Iterator;
 import java.util.Random;
 
 import static spaceinvaders.Commons.*;
 
 public class SpaceInvadersBoard extends AbstractBoard{
-
-    private final String EXPLOSION_IMAGE = "src/images/explosion.png";
+    
     private DefenderShot defenderShot = createBadSprite();
+    private final Defender defender;
     private int direction = -1;
 
     public SpaceInvadersBoard() {
         super(1, BOARD_WIDTH, BOARD_HEIGHT, Color.black);
+        this.defender = (Defender) players.get(0);
     }
 
     protected Player createPlayer() {
@@ -41,16 +41,6 @@ public class SpaceInvadersBoard extends AbstractBoard{
                 badnessBoxSprites.add(alien);
             }
         }
-    }
-
-    private void drawShot(Graphics g) {
-        if (defenderShot.isVisible()) {
-            g.drawImage(defenderShot.getImage(), defenderShot.getX(), defenderShot.getY(), this);
-        }
-    }
-
-    protected void drawOtherSprites(Graphics g) {
-        drawShot(g);
     }
 
     protected void processPlayerShot(Player player, KeyEvent e) {
@@ -73,54 +63,41 @@ public class SpaceInvadersBoard extends AbstractBoard{
         return new DefenderShot();
     }
 
-    @Override
-    protected void gameOver(Graphics2D g) {
-        g.setColor(Color.black);
-        g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-        g.setColor(new Color(0, 32, 48));
-        g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-        g.setColor(Color.white);
-        g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-        Font small = new Font("Helvetica", Font.BOLD, 14);
-        FontMetrics fontMetrics = this.getFontMetrics(small);
-        g.setColor(Color.white);
-        g.setFont(small);
-        g.drawString(message, (BOARD_WIDTH - fontMetrics.stringWidth(message)) / 2, BOARD_WIDTH / 2);
-    }
-
     protected void update() {
-        if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
+        if (enemieDeaths == NUMBER_OF_ALIENS_TO_DESTROY) {
             inGame = false;
             timer.stop();
             message = "Game won!";
         }
 
-        // player
-        for (Player player: players) 
-        	player.act();
+        defender.act();
+        updateDefenderShot();
 
-        // shot
+        updateInvaders();
+        updateInvaderShots();
+    }
+
+    private void updateDefenderShot() {
         if (defenderShot.isVisible()) {
 
             int shotX = defenderShot.getX();
             int shotY = defenderShot.getY();
 
-            for (BadnessBoxSprite alien : badnessBoxSprites) {
-                int alienX = alien.getX();
-                int alienY = alien.getY();
+            for (BadnessBoxSprite invader : badnessBoxSprites) {
+                int invaderX = invader.getX();
+                int invaderY = invader.getY();
 
-                if (alien.isVisible() && defenderShot.isVisible()) {
-                    if (
-                        shotX >= (alienX) &&
-                        shotX <= (alienX + ALIEN_WIDTH) &&
-                        shotY >= (alienY) &&
-                        shotY <= (alienY + ALIEN_HEIGHT)
-                    ) {
-                        ImageIcon ii = new ImageIcon(EXPLOSION_IMAGE);
-                        alien.setImage(ii.getImage());
-                        alien.setDying(true);
-                        deaths++;
+                if (invader.isVisible() && defenderShot.isVisible()) {
+                    boolean shotHitInvader =
+                            shotX >= (invaderX) &&
+                            shotX <= (invaderX + ALIEN_WIDTH) &&
+                            shotY >= (invaderY) &&
+                            shotY <= (invaderY + ALIEN_HEIGHT);
+                    if (shotHitInvader) {
+                        ((Invader)invader).setDeathImage();
+                        invader.setDying(true);
                         defenderShot.die();
+                        enemieDeaths++;
                     }
                 }
             }
@@ -134,18 +111,16 @@ public class SpaceInvadersBoard extends AbstractBoard{
                 defenderShot.setY(y);
             }
         }
+    }
 
-        // aliens
+    private void updateInvaders() {
         for (BadnessBoxSprite alien : badnessBoxSprites) {
             int x = alien.getX();
 
             if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
                 direction = -1;
 
-                Iterator<BadnessBoxSprite> i1 = badnessBoxSprites.iterator();
-
-                while (i1.hasNext()) {
-                    BadnessBoxSprite a2 = i1.next();
+                for (BadnessBoxSprite a2 : badnessBoxSprites) {
                     a2.setY(a2.getY() + GO_DOWN);
                 }
             }
@@ -153,19 +128,10 @@ public class SpaceInvadersBoard extends AbstractBoard{
             if (x <= BORDER_LEFT && direction != 1) {
                 direction = 1;
 
-                Iterator<BadnessBoxSprite> i2 = badnessBoxSprites.iterator();
-
-                while (i2.hasNext()) {
-                    BadnessBoxSprite a = i2.next();
+                for (BadnessBoxSprite a : badnessBoxSprites) {
                     a.setY(a.getY() + GO_DOWN);
                 }
             }
-        }
-
-        Iterator<BadnessBoxSprite> it = badnessBoxSprites.iterator();
-
-        while (it.hasNext()) {
-            BadnessBoxSprite alien = it.next();
 
             if (alien.isVisible()) {
                 int y = alien.getY();
@@ -178,13 +144,10 @@ public class SpaceInvadersBoard extends AbstractBoard{
                 alien.act(direction);
             }
         }
-
-        // bombs
-        updateOtherSprites();
     }
 
-    protected void updateOtherSprites() {
-		Random generator = new Random();
+    protected void updateInvaderShots() {
+        Random generator = new Random();
 
         for (BadnessBoxSprite alien : badnessBoxSprites) {
             int shot = generator.nextInt(15);
@@ -198,19 +161,19 @@ public class SpaceInvadersBoard extends AbstractBoard{
 
             int bombX = invaderShot.getX();
             int bombY = invaderShot.getY();
-            int playerX = players.get(0).getX();
-            int playerY = players.get(0).getY();
+            int playerX = defender.getX();
+            int playerY = defender.getY();
 
-            if (players.get(0).isVisible() && !invaderShot.isDestroyed()) {
+            if (defender.isVisible() && !invaderShot.isDestroyed()) {
                 if (
-                        bombX >= (playerX) &&
-                        bombX <= (playerX + PLAYER_WIDTH) &&
-                        bombY >= (playerY) &&
-                        bombY <= (playerY + PLAYER_HEIGHT)
+                    bombX >= (playerX) &&
+                    bombX <= (playerX + PLAYER_WIDTH) &&
+                    bombY >= (playerY) &&
+                    bombY <= (playerY + PLAYER_HEIGHT)
                 ) {
-                    ImageIcon ii = new ImageIcon(EXPLOSION_IMAGE);
-                    players.get(0).setImage(ii.getImage());
-                    players.get(0).setDying(true);
+                    ImageIcon ii = new ImageIcon("src/images/explosion.png");
+                    defender.setImage(ii.getImage());
+                    defender.setDying(true);
                     invaderShot.setDestroyed(true);
                 }
             }
@@ -222,7 +185,7 @@ public class SpaceInvadersBoard extends AbstractBoard{
                 }
             }
         }
-	}
+    }
 
     protected void doDrawing(Graphics g1) {
         g = (Graphics2D) g1;
@@ -247,15 +210,15 @@ public class SpaceInvadersBoard extends AbstractBoard{
     }
 
     private void drawBadSprites(Graphics g) {
-        for (BadnessBoxSprite bad : badnessBoxSprites) {
-            if (bad.isVisible()) {
-                g.drawImage(bad.getImage(), bad.getX(), bad.getY(), this);
+        for (BadnessBoxSprite invader : badnessBoxSprites) {
+            if (invader.isVisible()) {
+                g.drawImage(invader.getImage(), invader.getX(), invader.getY(), this);
             }
-            if (bad.isDying()) {
-                bad.die();
+            if (invader.isDying()) {
+                invader.die();
             }
-            if (bad.getBadnesses()!= null) {
-                for (BadSprite badness: bad.getBadnesses()) {
+            if (invader.getBadnesses()!= null) {
+                for (BadSprite badness: invader.getBadnesses()) {
                     if (!badness.isDestroyed()) {
                         g.drawImage(badness.getImage(), badness.getX(), badness.getY(), this);
                     }
@@ -275,6 +238,27 @@ public class SpaceInvadersBoard extends AbstractBoard{
                 inGame = false;
             }
         }
+    }
+
+    protected void drawOtherSprites(Graphics g) {
+        if (defenderShot.isVisible()) {
+            g.drawImage(defenderShot.getImage(), defenderShot.getX(), defenderShot.getY(), this);
+        }
+    }
+
+    @Override
+    protected void gameOver(Graphics2D g) {
+        g.setColor(Color.black);
+        g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+        g.setColor(new Color(0, 32, 48));
+        g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
+        g.setColor(Color.white);
+        g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
+        Font small = new Font("Helvetica", Font.BOLD, 14);
+        FontMetrics fontMetrics = this.getFontMetrics(small);
+        g.setColor(Color.white);
+        g.setFont(small);
+        g.drawString(message, (BOARD_WIDTH - fontMetrics.stringWidth(message)) / 2, BOARD_WIDTH / 2);
     }
 }
 

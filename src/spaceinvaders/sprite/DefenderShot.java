@@ -4,11 +4,9 @@ import javax.swing.ImageIcon;
 
 import spriteframework.sprite.BadSprite;
 
-
 public class DefenderShot extends BadSprite {
 
     public DefenderShot() {}
-
     public DefenderShot(int x, int y) {
         initShot(x, y);
     }
