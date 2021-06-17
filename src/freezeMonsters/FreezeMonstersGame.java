@@ -1,15 +1,12 @@
 package freezeMonsters;
 
 import spriteframework.AbstractBoard;
-import spriteframework.MainFrame;
+import spriteframework.GameFrame;
 
-import java.awt.*;
-
-public class FreezeMonstersGame extends MainFrame {
+public class FreezeMonstersGame extends GameFrame {
 
     public FreezeMonstersGame() {
-        super("Freeze Monsters");
-        setSize(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
+        runGame("Freeze Monsters", Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
     }
 
     @Override
@@ -18,6 +15,6 @@ public class FreezeMonstersGame extends MainFrame {
     }
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(FreezeMonstersGame::new);
+        new FreezeMonstersGame();
     }
 }

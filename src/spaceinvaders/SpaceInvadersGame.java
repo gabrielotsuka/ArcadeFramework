@@ -1,23 +1,20 @@
 package spaceinvaders;
 
-import java.awt.EventQueue;
-
 import spriteframework.AbstractBoard;
-import spriteframework.MainFrame;
+import spriteframework.GameFrame;
 
-public class SpaceInvadersGame extends MainFrame {
+public class SpaceInvadersGame extends GameFrame {
 
 	public SpaceInvadersGame () {
-		super("Space Invaders");
-		setSize(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
+		runGame("Space Invaders", Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
 	}
-	
+
+	@Override
 	protected  AbstractBoard createBoard() {
 		return new SpaceInvadersBoard();
 	}
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(SpaceInvadersGame::new);
+		new SpaceInvadersGame();
 	}
-
 }
