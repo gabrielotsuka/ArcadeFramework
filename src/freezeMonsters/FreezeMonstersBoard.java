@@ -4,13 +4,10 @@ import freezeMonsters.sprite.Monster;
 import freezeMonsters.sprite.MonsterShot;
 import freezeMonsters.sprite.Woody;
 import freezeMonsters.sprite.WoodyRay;
-import spaceinvaders.sprite.Invader;
-import spaceinvaders.sprite.InvaderShot;
 import spriteframework.AbstractBoard;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.Player;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
@@ -25,6 +22,7 @@ public class FreezeMonstersBoard extends AbstractBoard {
     private int rayDirectionY = -1;
 
     public FreezeMonstersBoard() {
+        super(1);
         d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
         setBackground(Color.green);
     }
@@ -246,7 +244,7 @@ public class FreezeMonstersBoard extends AbstractBoard {
     }
 
     @Override
-    protected void processOtherSprites(Player player, KeyEvent e) {
+    protected void processPlayerShot(Player player, KeyEvent e) {
         int x = player.getX();
         int y = player.getY();
 

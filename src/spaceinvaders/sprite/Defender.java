@@ -10,7 +10,6 @@ public class Defender extends Player {
 
     public void loadImage () {
         ImageIcon ii = new ImageIcon("src/images/defender.png");
-        imageWidth = ii.getImage().getWidth(null);
         setImage(ii.getImage());
     }
 
@@ -24,7 +23,7 @@ public class Defender extends Player {
         }
     }
 
-    public void keyPressed(KeyEvent e) {
+    public void processPressAction(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_LEFT) {
             dx = -2;
@@ -34,7 +33,7 @@ public class Defender extends Player {
         }
     }
 
-    public void keyReleased(KeyEvent e) {
+    public void processReleaseAction(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_LEFT) {
             dx = 0;

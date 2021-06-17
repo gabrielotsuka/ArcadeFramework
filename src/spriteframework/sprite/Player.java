@@ -7,8 +7,8 @@ import java.awt.event.KeyEvent;
 public abstract class Player extends Sprite {
 
     public abstract void act();
-    public abstract void keyPressed(KeyEvent e);
-    public abstract void keyReleased(KeyEvent e);
+    public abstract void processPressAction(KeyEvent e);
+    public abstract void processReleaseAction(KeyEvent e);
     public abstract void loadImage();
 
     public Player() {

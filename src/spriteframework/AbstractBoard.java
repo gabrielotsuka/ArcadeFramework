@@ -1,6 +1,5 @@
 package spriteframework;
 
-import spaceinvaders.sprite.DefenderShot;
 import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.Player;
 
@@ -12,16 +11,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 
-
 public abstract class AbstractBoard extends JPanel {
 
     protected Dimension d;
     protected Graphics2D g;
 
-    protected LinkedList<Player> players;
-    protected LinkedList<BadSprite> badSprites;
+    protected LinkedList<Player> players = new LinkedList<>();
+    protected LinkedList<BadSprite> badSprites = new LinkedList<>();
     
-    protected int numberPlayers;
+    protected int numberOfPlayers = 1;
     protected boolean inGame = true;
     protected String message = "Game Over";
     protected Timer timer;
@@ -30,43 +28,39 @@ public abstract class AbstractBoard extends JPanel {
     protected abstract Player createPlayer();
     protected abstract void createBadSprites();
     protected abstract void createOtherSprites();
+    protected abstract BadSprite createShot();
     protected abstract void drawOtherSprites(Graphics g);
     protected abstract void doDrawing(Graphics g);
+    protected abstract void processPlayerShot(Player player, KeyEvent e);
     protected abstract void update();
-    protected abstract void processOtherSprites(Player player, KeyEvent e);
-    protected abstract BadSprite createShot();
 
     protected abstract void gameOver(Graphics2D g);
 
-    public AbstractBoard() {
-        initBoard();
+    public AbstractBoard(int numberOfPlayers) {
+        initBoard(numberOfPlayers);
     }
 
-    private void initBoard() {
-    	addKeyListener(new TAdapter());
-    	setFocusable(true);
+    private void initBoard(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
 
-        createPlayers();
-        numberPlayers = 1;
-        badSprites = new LinkedList<>();
-        createBadSprites();
-        createOtherSprites();
+        addKeyListener(new TAdapter());
+        setFocusable(true);
+
+        createSprites();
 
         timer = new Timer(Commons.DELAY, new GameCycle());
         timer.start();
+    }
 
+    private void createSprites() {
+        createPlayers();
+        createBadSprites();
+        createOtherSprites();
     }
 
     protected void createPlayers() {
-		players = new LinkedList<>();
-        players.add(createPlayer());
+		players.add(createPlayer());
 	}
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        doDrawing(g);
-    }
 
     private class GameCycle implements ActionListener {
         @Override
@@ -84,16 +78,20 @@ public abstract class AbstractBoard extends JPanel {
         @Override
         public void keyReleased(KeyEvent e) {
             for (Player player: players)
-                 player.keyReleased(e);
+                 player.processReleaseAction(e);
         }
-
         @Override
         public void keyPressed(KeyEvent e) {
         	for (Player player: players) {
-                player.keyPressed(e);
-
-                processOtherSprites(player, e);
+                player.processPressAction(e);
+                processPlayerShot(player, e);
         	}
         }
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        doDrawing(g);
     }
 }

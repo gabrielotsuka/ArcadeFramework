@@ -34,7 +34,7 @@ public class Woody extends Player {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void processPressAction(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_LEFT) {
             dx = -2;
@@ -51,7 +51,7 @@ public class Woody extends Player {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void processReleaseAction(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_LEFT) {
             dx = 0;

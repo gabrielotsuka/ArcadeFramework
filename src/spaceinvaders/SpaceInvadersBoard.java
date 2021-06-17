@@ -1,6 +1,5 @@
 package spaceinvaders;
 
-
 import spaceinvaders.sprite.InvaderShot;
 import spaceinvaders.sprite.Defender;
 import spaceinvaders.sprite.Invader;
@@ -17,12 +16,12 @@ import java.util.Random;
 
 public class SpaceInvadersBoard extends AbstractBoard{
 
+    private final String EXPLOSION_IMAGE = "src/images/explosion.png";
     private DefenderShot defenderShot = createShot();
     private int direction = -1;
 
-    private final String explImg = "src/images/explosion.png";
-
     public SpaceInvadersBoard() {
+        super(1);
         d = new Dimension(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
         setBackground(Color.black);
     }
@@ -56,7 +55,7 @@ public class SpaceInvadersBoard extends AbstractBoard{
         drawShot(g);
     }
 
-    protected void processOtherSprites(Player player, KeyEvent e) {
+    protected void processPlayerShot(Player player, KeyEvent e) {
 		int x = player.getX();
 		int y = player.getY();
 
@@ -119,7 +118,7 @@ public class SpaceInvadersBoard extends AbstractBoard{
                         shotY >= (alienY) &&
                         shotY <= (alienY + Commons.ALIEN_HEIGHT)
                     ) {
-                        ImageIcon ii = new ImageIcon(explImg);
+                        ImageIcon ii = new ImageIcon(EXPLOSION_IMAGE);
                         alien.setImage(ii.getImage());
                         alien.setDying(true);
                         deaths++;
@@ -211,7 +210,7 @@ public class SpaceInvadersBoard extends AbstractBoard{
                         bombY >= (playerY) &&
                         bombY <= (playerY + Commons.PLAYER_HEIGHT)
                 ) {
-                    ImageIcon ii = new ImageIcon(explImg);
+                    ImageIcon ii = new ImageIcon(EXPLOSION_IMAGE);
                     players.get(0).setImage(ii.getImage());
                     players.get(0).setDying(true);
                     invaderShot.setDestroyed(true);
