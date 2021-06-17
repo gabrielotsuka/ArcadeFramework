@@ -1,6 +1,7 @@
 package spriteframework;
 
 import spriteframework.sprite.BadSprite;
+import spriteframework.sprite.BadnessBoxSprite;
 import spriteframework.sprite.Player;
 
 import javax.swing.*;
@@ -17,7 +18,7 @@ public abstract class AbstractBoard extends JPanel {
     protected Graphics2D g;
 
     protected LinkedList<Player> players = new LinkedList<>();
-    protected LinkedList<BadSprite> badSprites = new LinkedList<>();
+    protected LinkedList<BadnessBoxSprite> badnessBoxSprites = new LinkedList<>();
     
     protected int numberOfPlayers = 1;
     protected boolean inGame = true;
@@ -26,9 +27,8 @@ public abstract class AbstractBoard extends JPanel {
     protected int deaths = 0;
 
     protected abstract Player createPlayer();
-    protected abstract void createBadSprites();
-    protected abstract void createOtherSprites();
-    protected abstract BadSprite createShot();
+    protected abstract void createBadnessBoxSprites();
+    protected abstract BadSprite createBadSprite();
     protected abstract void drawOtherSprites(Graphics g);
     protected abstract void doDrawing(Graphics g);
     protected abstract void processPlayerShot(Player player, KeyEvent e);
@@ -36,12 +36,16 @@ public abstract class AbstractBoard extends JPanel {
 
     protected abstract void gameOver(Graphics2D g);
 
-    public AbstractBoard(int numberOfPlayers) {
-        initBoard(numberOfPlayers);
+
+    public AbstractBoard(int numberOfPlayers, int boardWidth, int boardHeight, Color color) {
+        initBoard(numberOfPlayers, boardWidth, boardHeight, color);
     }
 
-    private void initBoard(int numberOfPlayers) {
+    //Template method pattern
+    private void initBoard(int numberOfPlayers, int boardWidth, int boardHeight, Color color) {
         this.numberOfPlayers = numberOfPlayers;
+        d = new Dimension(boardWidth, boardHeight);
+        setBackground(color);
 
         addKeyListener(new TAdapter());
         setFocusable(true);
@@ -54,9 +58,11 @@ public abstract class AbstractBoard extends JPanel {
 
     private void createSprites() {
         createPlayers();
-        createBadSprites();
+        createBadnessBoxSprites();
         createOtherSprites();
     }
+
+    protected void createOtherSprites() {};
 
     protected void createPlayers() {
 		players.add(createPlayer());

@@ -3,9 +3,6 @@ package freezeMonsters.sprite;
 import spriteframework.sprite.BadSprite;
 
 import javax.swing.*;
-import java.awt.*;
-
-import static freezeMonsters.Commons.*;
 
 public class WoodyRay extends BadSprite {
 

@@ -4,12 +4,8 @@ import spriteframework.sprite.BadSprite;
 import spriteframework.sprite.BadnessBoxSprite;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Timer;
-
-import static freezeMonsters.Commons.*;
 
 public class Monster extends BadnessBoxSprite {
 

@@ -6,6 +6,7 @@ import freezeMonsters.sprite.Woody;
 import freezeMonsters.sprite.WoodyRay;
 import spriteframework.AbstractBoard;
 import spriteframework.sprite.BadSprite;
+import spriteframework.sprite.BadnessBoxSprite;
 import spriteframework.sprite.Player;
 
 import java.awt.*;
@@ -17,14 +18,12 @@ import static freezeMonsters.Commons.*;
 
 public class FreezeMonstersBoard extends AbstractBoard {
 
-    private WoodyRay woodyRay = createShot();
+    private WoodyRay woodyRay = createBadSprite();
     private int rayDirectionX = -1;
     private int rayDirectionY = -1;
 
     public FreezeMonstersBoard() {
-        super(1);
-        d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
-        setBackground(Color.green);
+        super(1, BOARD_WIDTH, BOARD_HEIGHT, Color.green);
     }
 
     @Override
@@ -33,24 +32,19 @@ public class FreezeMonstersBoard extends AbstractBoard {
     }
 
     @Override
-    protected void createBadSprites() {
+    protected void createBadnessBoxSprites() {
         Random generator = new Random();
         for (int i=0; i<NUMBER_OF_MONSTERS_TO_DESTROY; i++) {
             int monsterX = generator.nextInt(SPRITE_RIGHT_BORDER) + 1;
             int monsterY = generator.nextInt(SPRITE_DOWN_BORDER) + 1;
             Monster monster = new Monster(i+1, monsterX, monsterY);
-            badSprites.add(monster);
+            badnessBoxSprites.add(monster);
         }
     }
 
     @Override
-    protected WoodyRay createShot() {
+    protected WoodyRay createBadSprite() {
         return new WoodyRay();
-    }
-
-    @Override
-    protected void createOtherSprites() {
-
     }
 
     @Override
@@ -65,7 +59,7 @@ public class FreezeMonstersBoard extends AbstractBoard {
     }
 
     private void drawBadSprites(Graphics g) {
-        for (BadSprite bad : badSprites) {
+        for (BadnessBoxSprite bad : badnessBoxSprites) {
             if (bad.isVisible()) {
                 g.drawImage(bad.getImage(), bad.getX(), bad.getY(), this);
             }
@@ -137,7 +131,7 @@ public class FreezeMonstersBoard extends AbstractBoard {
             int shotX = woodyRay.getX();
             int shotY = woodyRay.getY();
 
-            for (BadSprite monster : badSprites) {
+            for (BadnessBoxSprite monster : badnessBoxSprites) {
                 int monsterX = monster.getX();
                 int monsterY = monster.getY();
 
@@ -173,7 +167,7 @@ public class FreezeMonstersBoard extends AbstractBoard {
 
         // Monsters
         Timestamp time = new Timestamp(System.currentTimeMillis());
-        for (BadSprite bad : badSprites) {
+        for (BadnessBoxSprite bad : badnessBoxSprites) {
             if(bad.isDestroyed()) {
                 continue ;
             }
@@ -200,7 +194,7 @@ public class FreezeMonstersBoard extends AbstractBoard {
         // Goop
         Random generator = new Random();
 
-        for (BadSprite monster : badSprites) {
+        for (BadnessBoxSprite monster : badnessBoxSprites) {
             int shot = generator.nextInt(15);
             MonsterShot monsterShot = (MonsterShot)monster.getBadnesses().get(0);
 
